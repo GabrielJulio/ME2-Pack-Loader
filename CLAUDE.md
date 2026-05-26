@@ -43,14 +43,41 @@ enabled = false
 
 The app manages this file: toggling `enabled` on mods, adding/removing entries in `mods` and `external_dlls`, and toggling top-level extension flags.
 
+## Architecture
+
+```
+lib/
+  main.dart / app.dart          # entry point, MaterialApp (dark theme forced)
+  models/                       # Mod, GameConfig, LayoutType
+  services/                     # ConfigService (TOML), ModService (fs), PreferencesService
+  bloc/config/                  # ConfigBloc — all TOML mutations, writes on every event
+  bloc/setup/                   # SetupBloc — first-run folder selection
+  bloc/layout/                  # LayoutBloc — persisted layout preference
+  screens/                      # OnboardingScreen, HomeScreen, SteamSetupScreen
+  widgets/                      # ModList, GnomeLayout, SettingsPanel, ExternalDllList, dialogs
+  utils/slugify.dart
+```
+
+**Layout switching:** `HomeScreen` provides both `ConfigBloc` and `LayoutBloc`. A `PopupMenuButton` in the AppBar dispatches `LayoutSelected`; the body switches between `_DefaultLayout` (sidebar + main) and `GnomeLayout` (NavigationRail + pages). The choice is persisted via `PreferencesService`.
+
+**TOML writes:** Every `ConfigBloc` mutation calls `ConfigService.write` before emitting the new state — the file is always in sync with the UI.
+
+**Dev override:** Set `MODENGINE_DIR` env var to point at a real ModEngine2 folder while running with `flutter run`.
+
 ## Commands
 
 ```sh
 # Run on Linux
 flutter run -d linux
 
+# Run against a real ModEngine2 folder
+MODENGINE_DIR=/mnt/storage/launchers/mod_engine_2 flutter run -d linux
+
 # Build release
 flutter build linux
+
+# Build AppImage (requires packaging/me2_pack_loader.png icon)
+bash scripts/build_appimage.sh
 
 # Analyze (lint)
 flutter analyze
@@ -61,6 +88,12 @@ flutter test
 # Run a single test file
 flutter test test/path/to/file_test.dart
 ```
+
+## AppImage packaging
+
+- Script: `scripts/build_appimage.sh` (auto-downloads `appimagetool` if not on PATH)
+- Desktop entry: `packaging/me2_pack_loader.desktop`
+- **Icon required:** add a 256×256 PNG at `packaging/me2_pack_loader.png` before running the script
 
 ## Platform target
 

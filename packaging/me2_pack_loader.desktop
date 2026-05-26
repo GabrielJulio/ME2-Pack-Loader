@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=ME2 Pack Loader
+Comment=ModEngine2 mod pack manager for FromSoftware games
+Exec=me2_pack_loader
+Icon=me2_pack_loader
+Type=Application
+Categories=Game;
+StartupNotify=true

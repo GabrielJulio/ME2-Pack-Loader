@@ -8,16 +8,21 @@ A Flutter desktop GUI for managing [ModEngine2](https://github.com/soulsmods/Mod
 
 | Objective | Status |
 |---|---|
-| Support Dark Souls 3 | 🚧 In progress |
+| Support Dark Souls 3 | ✅ Done |
+| Support Bazzite (Linux) | ✅ Done |
+| Multiple UI layouts | 🚧 In progress |
 | Support Elden Ring | ⬜ Planned |
-| Support Bazzite (Linux) | 🚧 In progress |
-| Support Windows | ⬜ Planned |
-| Multiple UI layouts | ⬜ Planned |
 | AppImage with auto-updates via GitHub releases | ⬜ Planned |
+| Support Windows | ⬜ Planned |
+
+## Known Bugs
+
+- **Strange colors** — theme colors are off in some areas; under investigation.
+- **Window title bar not themed** — the native title bar (minimize, maximize, close buttons) does not pick up the app's color scheme in either layout.
 
 ## How it works
 
-ME2-Pack-Loader reads and writes the ModEngine2 TOML config file (`dark_souls_3.toml`). Each mod is a folder inside the ModEngine2 directory. The app lets you:
+ME2-Pack-Loader reads and writes the ModEngine2 TOML config file. Each mod is a folder inside the ModEngine2 directory. The app lets you:
 
 - Add, rename, and delete mod folders
 - Enable or disable individual mods

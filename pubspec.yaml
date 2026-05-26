@@ -1,5 +1,5 @@
 name: me2_pack_loader
-description: "A new Flutter project."
+description: "Flutter desktop GUI for managing ModEngine2 mod packs."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -10,7 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
+  flutter_bloc: ^8.1.6
+  toml: ^0.18.0
+  file_picker: ^8.1.7
+  shared_preferences: ^2.3.5
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:
