@@ -116,9 +116,8 @@ class _DefaultLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-
         SizedBox(
           width: 280,
           child: Material(
@@ -128,22 +127,7 @@ class _DefaultLayout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.sports_esports, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Dark Souls III',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _GameSelector(),
                   const Divider(),
                   const SettingsPanel(),
                   const Divider(),
@@ -153,7 +137,6 @@ class _DefaultLayout extends StatelessWidget {
             ),
           ),
         ),
-
         Expanded(
           child: ModList(baseDir: baseDir, modService: modService),
         ),
@@ -168,7 +151,7 @@ class _LayoutSwitcher extends StatelessWidget {
     return BlocBuilder<LayoutBloc, LayoutState>(
       builder: (context, state) {
         return PopupMenuButton<LayoutType>(
-          icon: const Icon(Icons.view_quilt_outlined),
+          icon: const Icon(Icons.dashboard_customize_outlined),
           tooltip: 'Switch layout',
           onSelected: (type) =>
               context.read<LayoutBloc>().add(LayoutSelected(type)),
@@ -228,6 +211,40 @@ class _ErrorView extends StatelessWidget {
           const SizedBox(height: 16),
           FilledButton(onPressed: onRetry, child: const Text('Retry')),
         ],
+      ),
+    );
+  }
+}
+
+class _GameSelector extends StatelessWidget {
+  static const _games = ['Dark Souls III'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: DropdownButtonFormField<String>(
+        initialValue: _games.first,
+        decoration: const InputDecoration(
+          prefixIcon: Icon(Icons.sports_esports, size: 20),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          border: OutlineInputBorder(),
+          isDense: true,
+        ),
+        items: [
+          ..._games.map(
+            (g) => DropdownMenuItem(value: g, child: Text(g)),
+          ),
+          const DropdownMenuItem(
+            enabled: false,
+            value: null,
+            child: Tooltip(
+              message: 'Coming in a future update',
+              child: Text('Elden Ring', style: TextStyle(fontSize: 13)),
+            ),
+          ),
+        ],
+        onChanged: (_) {},
       ),
     );
   }

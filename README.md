@@ -10,15 +10,16 @@ A Flutter desktop GUI for managing [ModEngine2](https://github.com/soulsmods/Mod
 |---|---|
 | Support Dark Souls 3 | ✅ Done |
 | Support Bazzite (Linux) | ✅ Done |
-| Multiple UI layouts | 🚧 In progress |
+| Multiple UI layouts | ✅ Done |
+| App icon | ✅ Done |
+| ME2 Obsidian theme + Inter font | ✅ Done |
 | Support Elden Ring | ⬜ Planned |
 | AppImage with auto-updates via GitHub releases | ⬜ Planned |
 | Support Windows | ⬜ Planned |
 
 ## Known Bugs
 
-- **Strange colors** — theme colors are off in some areas; under investigation.
-- **Window title bar not themed** — the native title bar (minimize, maximize, close buttons) does not pick up the app's color scheme in either layout.
+- **Window title bar not themed** — the native GTK title bar (minimize, maximize, close buttons) does not fully pick up the app's color scheme on all desktop environments.
 
 ## How it works
 

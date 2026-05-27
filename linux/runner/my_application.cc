@@ -25,6 +25,40 @@ static void my_application_activate(GApplication* application) {
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
+  GtkCssProvider* css = gtk_css_provider_new();
+  gtk_css_provider_load_from_data(css,
+    "headerbar, .titlebar {"
+    "  background-color: #100E10;"
+    "  background-image: none;"
+    "  border-bottom: 1px solid #2C272B;"
+    "  box-shadow: none;"
+    "  color: #F1E9E5;"
+    "}"
+    "headerbar button, .titlebar button {"
+    "  background-color: transparent;"
+    "  border: none;"
+    "  box-shadow: none;"
+    "  color: #F1E9E5;"
+    "}"
+    "headerbar button:hover, .titlebar button:hover {"
+    "  background-color: #1D191D;"
+    "}",
+    -1, nullptr);
+  gtk_style_context_add_provider_for_screen(
+    gtk_window_get_screen(window),
+    GTK_STYLE_PROVIDER(css),
+    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref(css);
+
+  gchar* exe_path  = realpath("/proc/self/exe", nullptr);
+  gchar* exe_dir   = g_path_get_dirname(exe_path);
+  gchar* icon_path = g_build_filename(
+      exe_dir, "..", "data", "flutter_assets", "assets", "icon.png", nullptr);
+  gtk_window_set_icon_from_file(window, icon_path, nullptr);
+  g_free(exe_path);
+  g_free(exe_dir);
+  g_free(icon_path);
+
   // Use a header bar when running in GNOME as this is the common style used
   // by applications and is the setup most users will be using (e.g. Ubuntu
   // desktop).
@@ -45,11 +79,11 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "me2_pack_loader");
+    gtk_header_bar_set_title(header_bar, "ME2 Pack Loader");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
   } else {
-    gtk_window_set_title(window, "me2_pack_loader");
+    gtk_window_set_title(window, "ME2 Pack Loader");
   }
 
   gtk_window_set_default_size(window, 1280, 720);

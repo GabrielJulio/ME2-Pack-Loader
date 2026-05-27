@@ -6,7 +6,14 @@ import '../bloc/config/config_event.dart';
 import '../bloc/config/config_state.dart';
 
 class SettingsPanel extends StatelessWidget {
-  const SettingsPanel({super.key});
+  final bool hideDebug;
+  final bool debugOnly;
+
+  const SettingsPanel({
+    super.key,
+    this.hideDebug = false,
+    this.debugOnly = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +23,29 @@ class SettingsPanel extends StatelessWidget {
 
         final cfg = state.config;
         final bloc = context.read<ConfigBloc>();
+
+        if (debugOnly) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Debug Mode'),
+                subtitle: cfg.debug
+                    ? Text(
+                        'Developer option — disable for normal play',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      )
+                    : null,
+                value: cfg.debug,
+                onChanged: (_) => bloc.add(DebugToggled()),
+              ),
+            ],
+          );
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,21 +72,22 @@ class SettingsPanel extends StatelessWidget {
               value: cfg.scyllaHideEnabled,
               onChanged: (_) => bloc.add(ScyllaHideToggled()),
             ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Debug Mode'),
-              subtitle: cfg.debug
-                  ? Text(
-                      'Developer option — disable for normal play',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                        fontSize: 12,
-                      ),
-                    )
-                  : null,
-              value: cfg.debug,
-              onChanged: (_) => bloc.add(DebugToggled()),
-            ),
+            if (!hideDebug)
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Debug Mode'),
+                subtitle: cfg.debug
+                    ? Text(
+                        'Developer option — disable for normal play',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      )
+                    : null,
+                value: cfg.debug,
+                onChanged: (_) => bloc.add(DebugToggled()),
+              ),
           ],
         );
       },
