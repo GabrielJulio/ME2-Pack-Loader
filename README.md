@@ -34,12 +34,13 @@ Plans drafted and ready to execute. Each file is self-contained (Context / Goal 
 | Objective | Plan |
 |---|---|
 | Bundle ModEngine2 (no user-supplied install) | [tasks/01](./tasks/01-bundled-modengine.md) |
-| Data directory management (default vs. custom disk) | [tasks/02](./tasks/02-data-dir-management.md) |
-| Multi-game support (Dark Souls III, Elden Ring, Dark Souls: Remastered) | [tasks/03](./tasks/03-multi-game-support.md) |
-| Mod packs (named TOMLs per game, activate flow) | [tasks/04](./tasks/04-mod-packs.md) |
-| Material red accent | [tasks/05](./tasks/05-material-red-accent.md) |
-| Desktop-aware theme (auto-detect GNOME accent) | [tasks/06](./tasks/06-desktop-aware-theme.md) |
-| Steam launch command (copy-paste with instructions) | [tasks/07](./tasks/07-steam-launch-command.md) |
+| Translations (English + Brazilian Portuguese) | [tasks/02](./tasks/02-translations.md) |
+| Data directory management (default vs. custom disk) | [tasks/03](./tasks/03-data-dir-management.md) |
+| Multi-game support (Dark Souls III, Elden Ring, Dark Souls: Remastered) | [tasks/04](./tasks/04-multi-game-support.md) |
+| Mod packs (named TOMLs per game, activate flow) | [tasks/05](./tasks/05-mod-packs.md) |
+| Material red accent | [tasks/06](./tasks/06-material-red-accent.md) |
+| Desktop-aware theme (auto-detect GNOME accent) | [tasks/07](./tasks/07-desktop-aware-theme.md) |
+| Steam launch command (copy-paste with instructions) | [tasks/08](./tasks/08-steam-launch-command.md) |
 
 ### Planned
 

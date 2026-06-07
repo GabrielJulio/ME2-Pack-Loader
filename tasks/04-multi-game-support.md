@@ -1,8 +1,8 @@
-# 03 — Multi-Game Support
+# 04 — Multi-Game Support
 
 ## Context
 
-Three games are in scope: Dark Souls III, Elden Ring, Dark Souls: Remastered. Each gets a game folder under the current **data dir** (see [task 02](./02-data-dir-management.md) for how the data dir is chosen and moved). Games are **activated on demand** — the app never pre-creates folders for games the user hasn't asked for.
+Three games are in scope: Dark Souls III, Elden Ring, Dark Souls: Remastered. Each gets a game folder under the current **data dir** (see [task 03](./03-data-dir-management.md) for how the data dir is chosen and moved). Games are **activated on demand** — the app never pre-creates folders for games the user hasn't asked for.
 
 Game folder path:
 - Default data dir: `<ME2 folder>/<game.slug>/`
@@ -41,7 +41,7 @@ enum Game {
 - `PreferencesService`:
   - `getActivatedGames()` / `setActivatedGames(Set<Game>)` — persisted as comma-separated slugs.
   - `getCurrentGame()` / `setCurrentGame(Game)`.
-  - (Data-dir storage lives in the pointer config, not prefs — see task 02.)
+  - (Data-dir storage lives in the pointer config, not prefs — see task 03.)
 - New `GameBloc`:
   - States: `GamesInitial`, `GamesLoaded(activated, current)`.
   - Events: `GamesLoadRequested`, `GameActivated(Game)`, `GameSelected(Game)`.
@@ -66,11 +66,11 @@ enum Game {
 - `lib/widgets/game_switcher.dart` — new.
 - `lib/widgets/add_game_dialog.dart` — new.
 
-(Onboarding screen changes live in task 02.)
+(Onboarding screen changes live in task 03.)
 
 ## Verification
 
-1. Fresh install (after data dir set per task 02) → home screen shows empty state + "Add game…" button.
+1. Fresh install (after data dir set per task 03) → home screen shows empty state + "Add game…" button.
 2. Activate DS3 → `<games-root>/dark_souls_3/default.toml` + `config.toml` created.
 3. Activate ER → switcher shows DS3 + ER; switching reloads the right pack list.
 4. Restart → activated set and last-current game persist.
