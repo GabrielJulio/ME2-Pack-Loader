@@ -10,7 +10,7 @@ import 'language_selector.dart';
 import 'mod_list.dart';
 import 'settings_panel.dart';
 
-const _gnomeAccent = Color(0xFF8AB4F8);
+const _defaultGnomeAccent = Color(0xFF8AB4F8);
 const _background  = Color(0xFF070607);
 const _surface1    = Color(0xFF100E10);
 const _surface3    = Color(0xFF1D191D);
@@ -22,11 +22,13 @@ const _error       = Color(0xFFCF6679);
 class GnomeLayout extends StatefulWidget {
   final Directory baseDir;
   final ModService modService;
+  final Color? accentColor;
 
   const GnomeLayout({
     super.key,
     required this.baseDir,
     required this.modService,
+    this.accentColor,
   });
 
   @override
@@ -37,12 +39,13 @@ class _GnomeLayoutState extends State<GnomeLayout> {
   int _selectedIndex = 0;
 
   ThemeData _buildGnomeTheme(BuildContext context) {
+    final accent = widget.accentColor ?? _defaultGnomeAccent;
     final base = Theme.of(context);
     return base.copyWith(
       colorScheme: base.colorScheme.copyWith(
-        primary:     _gnomeAccent,
+        primary:     accent,
         onPrimary:   _background,
-        secondary:   _gnomeAccent,
+        secondary:   accent,
         onSecondary: _background,
       ),
       textTheme: GoogleFonts.interTextTheme(base.textTheme).apply(
@@ -51,21 +54,21 @@ class _GnomeLayoutState extends State<GnomeLayout> {
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: _surface1,
-        indicatorColor: _gnomeAccent.withValues(alpha: 0.15),
+        indicatorColor: accent.withValues(alpha: 0.15),
         unselectedIconTheme: const IconThemeData(color: _textMuted),
-        selectedIconTheme: const IconThemeData(color: _gnomeAccent),
-        selectedLabelTextStyle: const TextStyle(
-          color: _gnomeAccent,
+        selectedIconTheme: IconThemeData(color: accent),
+        selectedLabelTextStyle: TextStyle(
+          color: accent,
           fontWeight: FontWeight.w600,
         ),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? _gnomeAccent : _textMuted,
+          (s) => s.contains(WidgetState.selected) ? accent : _textMuted,
         ),
         trackColor: WidgetStateProperty.resolveWith(
           (s) => s.contains(WidgetState.selected)
-              ? _gnomeAccent.withValues(alpha: 0.4)
+              ? accent.withValues(alpha: 0.4)
               : _surface3,
         ),
       ),

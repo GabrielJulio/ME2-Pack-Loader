@@ -1,15 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/layout_type.dart';
+import '../../services/desktop_environment_service.dart';
 import '../../services/preferences_service.dart';
 import 'layout_event.dart';
 import 'layout_state.dart';
 
 class LayoutBloc extends Bloc<LayoutEvent, LayoutState> {
   final PreferencesService preferencesService;
+  final DesktopEnvironmentService desktopEnvironmentService;
 
-  LayoutBloc({required this.preferencesService})
-      : super(const LayoutState(LayoutType.defaultMaterial)) {
+  LayoutBloc({
+    required this.preferencesService,
+    required this.desktopEnvironmentService,
+  }) : super(const LayoutState(LayoutType.defaultMaterial)) {
     on<LayoutStarted>(_onStarted);
     on<LayoutSelected>(_onSelected);
   }
@@ -18,8 +22,14 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> {
     LayoutStarted event,
     Emitter<LayoutState> emit,
   ) async {
-    final value = await preferencesService.getLayout();
-    emit(LayoutState(LayoutType.fromValue(value)));
+    if (desktopEnvironmentService.isGnome()) {
+      final accent = await desktopEnvironmentService.gnomeAccentColor();
+      if (accent != null) {
+        emit(LayoutState(LayoutType.gnome, accentColor: accent));
+        return;
+      }
+    }
+    emit(const LayoutState(LayoutType.defaultMaterial));
   }
 
   Future<void> _onSelected(

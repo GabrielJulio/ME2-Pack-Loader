@@ -55,3 +55,17 @@ When a user activates a game for the first time, the game folder gets created. T
 | (b) Split into `PackBloc` + `EditorBloc` | Rejected per Q2. |
 
 **Decision taken: (a).** Extended with `packSlug` for now. Mutations write to both `<slug>.toml` and `config.toml`. Multi-pack list UI deferred to a follow-up slice.
+
+---
+
+## D9 — Where does the Steam Setup callsite resolve its paths?
+
+`SteamSetupScreen` now takes `game`, `gameBaseDir`, and `me2LauncherPath` as required constructor args. The home screen needs to resolve these before navigating. Two options:
+
+| Possibility | What it does |
+|---|---|
+| **(a) Resolve inline at button tap via `DataDirService` + `ModEngineLocator`** | ✓ TAKEN. Async resolution at tap time. Works without any new bloc state. The currently-supported game is hard-coded to `Game.darkSouls3` until the AppBar `GameSwitcher` lands as part of task 04 UI work. |
+| (b) Wait for `GameBloc` UI integration | Keeps the Steam button broken until the bigger UI overhaul finishes. |
+| (c) Bake the paths into `HomeScreen`'s constructor | Tight coupling to startup wiring. |
+
+**Decision taken: (a).** A small async resolution at tap time means the Steam Setup screen works today, before the full `GameBloc` UI integration lands. When the AppBar `GameSwitcher` arrives, swap the hard-coded `Game.darkSouls3` for the current game from `GameBloc`.

@@ -2,15 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/game.dart';
+import '../services/steam_command_service.dart';
 
 class SteamSetupScreen extends StatelessWidget {
-  const SteamSetupScreen({super.key});
+  final Game game;
+  final String gameBaseDir;
+  final String me2LauncherPath;
 
-  static const _placeholderCommand = '# Launch command — coming in a future update';
+  const SteamSetupScreen({
+    super.key,
+    required this.game,
+    required this.gameBaseDir,
+    required this.me2LauncherPath,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final command = SteamCommandService.buildCommand(
+      game: game,
+      gameBaseDir: gameBaseDir,
+      me2LauncherPath: me2LauncherPath,
+    );
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.steamSetupTitle)),
       body: Center(
@@ -29,35 +44,7 @@ class SteamSetupScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(l10n.steamSetupInstructions),
                 const SizedBox(height: 24),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: SelectableText(
-                          _placeholderCommand,
-                          style: const TextStyle(fontFamily: 'monospace'),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.copy),
-                        tooltip: l10n.copyToClipboardTooltip,
-                        onPressed: () {
-                          Clipboard.setData(
-                            const ClipboardData(text: _placeholderCommand),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(l10n.copiedToClipboard)),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                _CopyableCommand(command: command),
                 const SizedBox(height: 32),
                 FilledButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -67,6 +54,44 @@ class SteamSetupScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CopyableCommand extends StatelessWidget {
+  final String command;
+
+  const _CopyableCommand({required this.command});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Expanded(
+            child: SelectableText(
+              command,
+              style: const TextStyle(fontFamily: 'monospace'),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.copy),
+            tooltip: l10n.copyToClipboardTooltip,
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: command));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(l10n.copiedToClipboard)),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

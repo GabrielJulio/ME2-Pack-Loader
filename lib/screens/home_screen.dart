@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart' as p;
 
 import '../bloc/config/config_bloc.dart';
 import '../bloc/config/config_event.dart';
@@ -10,9 +12,13 @@ import '../bloc/layout/layout_bloc.dart';
 import '../bloc/layout/layout_event.dart';
 import '../bloc/layout/layout_state.dart';
 import '../l10n/app_localizations.dart';
+import '../models/game.dart';
 import '../models/layout_type.dart';
 import '../services/config_service.dart';
+import '../services/data_dir_service.dart';
+import '../services/desktop_environment_service.dart';
 import '../services/mod_service.dart';
+import '../services/modengine_locator.dart';
 import '../services/preferences_service.dart';
 import '../widgets/external_dll_list.dart';
 import '../widgets/gnome_layout.dart';
@@ -35,8 +41,11 @@ class HomeScreen extends StatelessWidget {
             ..add(ConfigLoadRequested(Directory(modEngineDir))),
         ),
         BlocProvider(
-          create: (_) => LayoutBloc(preferencesService: PreferencesService())
-            ..add(LayoutStarted()),
+          create: (_) => LayoutBloc(
+            preferencesService: PreferencesService(),
+            desktopEnvironmentService:
+                DesktopEnvironmentService.fromPlatform(),
+          )..add(LayoutStarted()),
         ),
       ],
       child: _HomeShell(modEngineDir: modEngineDir),
@@ -56,11 +65,9 @@ class _HomeShell extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.appTitle),
         actions: [
-          _LayoutSwitcher(),
+          if (kDebugMode) _LayoutSwitcher(),
           _LaunchGameButton(
-            onSetupTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const SteamSetupScreen()),
-            ),
+            onSetupTap: () => _openSteamSetup(context),
           ),
           const SizedBox(width: 8),
         ],
@@ -81,7 +88,12 @@ class _HomeShell extends StatelessWidget {
           if (configState is ConfigLoaded) {
             return BlocBuilder<LayoutBloc, LayoutState>(
               builder: (context, layoutState) {
-                return _buildLayout(context, layoutState.type, configState);
+                return _buildLayout(
+                  context,
+                  layoutState.type,
+                  configState,
+                  layoutState.accentColor,
+                );
               },
             );
           }
@@ -91,10 +103,34 @@ class _HomeShell extends StatelessWidget {
     );
   }
 
+  Future<void> _openSteamSetup(BuildContext context) async {
+    // TODO(task-04): replace the hard-coded DS3 with the current game from
+    // GameBloc once the AppBar GameSwitcher lands. See refactor.md D9.
+    const game = Game.darkSouls3;
+    final locator = ModEngineLocator.production();
+    final dataDirService = DataDirService(
+      appFolder: () async => (await locator.resolve()).parent,
+    );
+    final gamesRoot = await dataDirService.gamesRoot();
+    final gameBaseDir = p.join(gamesRoot.path, game.slug);
+    final launcher = await locator.launcherExe();
+    if (!context.mounted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => SteamSetupScreen(
+          game: game,
+          gameBaseDir: gameBaseDir,
+          me2LauncherPath: launcher.path,
+        ),
+      ),
+    );
+  }
+
   Widget _buildLayout(
     BuildContext context,
     LayoutType type,
     ConfigLoaded configState,
+    Color? accentColor,
   ) {
     final modService = ModService();
     return switch (type) {
@@ -105,6 +141,7 @@ class _HomeShell extends StatelessWidget {
       LayoutType.gnome => GnomeLayout(
           baseDir: configState.baseDir,
           modService: modService,
+          accentColor: accentColor,
         ),
     };
   }
