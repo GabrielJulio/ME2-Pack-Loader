@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/app_localizations.dart';
+
 class SteamSetupScreen extends StatelessWidget {
   const SteamSetupScreen({super.key});
 
@@ -8,8 +10,9 @@ class SteamSetupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Set up Steam')),
+      appBar: AppBar(title: Text(l10n.steamSetupTitle)),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
@@ -20,16 +23,11 @@ class SteamSetupScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Add ME2 Pack Loader to Steam',
+                  l10n.steamSetupHeading,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  '1. Open Steam\n'
-                  '2. Right-click Dark Souls III in your library\n'
-                  '3. Choose Properties → Launch Options\n'
-                  '4. Paste the command below and click OK',
-                ),
+                Text(l10n.steamSetupInstructions),
                 const SizedBox(height: 24),
                 Container(
                   decoration: BoxDecoration(
@@ -47,13 +45,13 @@ class SteamSetupScreen extends StatelessWidget {
                       ),
                       IconButton(
                         icon: const Icon(Icons.copy),
-                        tooltip: 'Copy to clipboard',
+                        tooltip: l10n.copyToClipboardTooltip,
                         onPressed: () {
                           Clipboard.setData(
                             const ClipboardData(text: _placeholderCommand),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Copied to clipboard')),
+                            SnackBar(content: Text(l10n.copiedToClipboard)),
                           );
                         },
                       ),
@@ -63,7 +61,7 @@ class SteamSetupScreen extends StatelessWidget {
                 const SizedBox(height: 32),
                 FilledButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Done'),
+                  child: Text(l10n.buttonDone),
                 ),
               ],
             ),

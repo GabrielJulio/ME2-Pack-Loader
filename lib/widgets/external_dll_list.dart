@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import '../bloc/config/config_bloc.dart';
 import '../bloc/config/config_event.dart';
 import '../bloc/config/config_state.dart';
+import '../l10n/app_localizations.dart';
 
 class ExternalDllList extends StatelessWidget {
   final Directory baseDir;
@@ -16,6 +17,7 @@ class ExternalDllList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return BlocBuilder<ConfigBloc, ConfigState>(
       builder: (context, state) {
         if (state is! ConfigLoaded) return const SizedBox.shrink();
@@ -30,13 +32,13 @@ class ExternalDllList extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'External DLLs',
+                    l10n.headerExternalDlls,
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add, size: 20),
-                  tooltip: 'Add DLL',
+                  tooltip: l10n.addDllTooltip,
                   onPressed: () => _addDll(context, bloc),
                 ),
               ],
@@ -45,7 +47,7 @@ class ExternalDllList extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text(
-                  'No DLLs added',
+                  l10n.noDllsAdded,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               )
@@ -72,7 +74,7 @@ class ExternalDllList extends StatelessWidget {
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.close, size: 18),
-                        tooltip: 'Remove',
+                        tooltip: l10n.removeTooltip,
                         onPressed: () => bloc.add(DllRemoved(i)),
                       ),
                     ),
@@ -85,8 +87,8 @@ class ExternalDllList extends StatelessWidget {
   }
 
   Future<void> _addDll(BuildContext context, ConfigBloc bloc) async {
+    final l10n = AppLocalizations.of(context);
     final result = await FilePicker.platform.pickFiles(
-      dialogTitle: 'Select a DLL inside your ModEngine2 folder',
       type: FileType.custom,
       allowedExtensions: ['dll'],
     );
@@ -99,9 +101,7 @@ class ExternalDllList extends StatelessWidget {
     if (rel.startsWith('..')) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('DLL must be inside the ModEngine2 folder.'),
-          ),
+          SnackBar(content: Text(l10n.dllOutsideFolderError)),
         );
       }
       return;

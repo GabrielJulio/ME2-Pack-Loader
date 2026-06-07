@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/mod.dart';
 import '../services/mod_service.dart';
 
@@ -21,34 +22,33 @@ class DeleteModDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text('Delete mod?'),
+      title: Text(l10n.deleteModDialogTitle),
       content: RichText(
         text: TextSpan(
           style: Theme.of(context).textTheme.bodyMedium,
           children: [
-            const TextSpan(
-              text: 'This will permanently delete the folder and all its files for ',
-            ),
+            TextSpan(text: l10n.deleteModDialogBodyBefore),
             TextSpan(
               text: mod.name,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            const TextSpan(text: '. This cannot be undone.'),
+            TextSpan(text: l10n.deleteModDialogBodyAfter),
           ],
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(l10n.buttonCancel),
         ),
         TextButton(
           onPressed: () => _delete(context),
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).colorScheme.error,
           ),
-          child: const Text('Delete'),
+          child: Text(l10n.buttonDelete),
         ),
       ],
     );

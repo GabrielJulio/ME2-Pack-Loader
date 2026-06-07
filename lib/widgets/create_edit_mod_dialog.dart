@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/mod.dart';
 import '../services/mod_service.dart';
 import '../utils/slugify.dart';
@@ -75,13 +76,11 @@ class _CreateEditModDialogState extends State<CreateEditModDialog> {
   }
 
   Future<void> _importFiles() async {
+    final l10n = AppLocalizations.of(context);
     final targetPath = _isEditMode ? widget.existingMod!.path : _slug;
     if (targetPath.isEmpty) return;
 
-    final result = await FilePicker.platform.pickFiles(
-      dialogTitle: 'Select mod files to import',
-      allowMultiple: true,
-    );
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result == null || result.paths.isEmpty) return;
 
     final paths = result.paths.whereType<String>().toList();
@@ -89,7 +88,9 @@ class _CreateEditModDialogState extends State<CreateEditModDialog> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${paths.length} file(s) imported to $targetPath/')),
+        SnackBar(
+          content: Text(l10n.filesImported(paths.length, targetPath)),
+        ),
       );
     }
   }
@@ -114,9 +115,13 @@ class _CreateEditModDialogState extends State<CreateEditModDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final title = _isEditMode
-        ? 'Import files — ${widget.existingMod!.name}'
-        : 'Add mod';
+        ? l10n.importFilesForMod(widget.existingMod!.name)
+        : l10n.addModTitle;
+    final folderForTip = _isEditMode
+        ? widget.existingMod!.path
+        : (_slug.isNotEmpty ? _slug : l10n.slugFolderPlaceholder);
 
     return AlertDialog(
       title: Text(title),
@@ -132,17 +137,19 @@ class _CreateEditModDialogState extends State<CreateEditModDialog> {
                 TextFormField(
                   controller: _nameController,
                   autofocus: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Mod name',
-                    hintText: 'e.g. My Texture Pack',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.modNameLabel,
+                    hintText: l10n.modNameHint,
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Name is required';
+                      return l10n.validationNameRequired;
                     }
-                    if (_slug.isEmpty) return 'Name produces an empty folder name';
-                    if (_slugStatus == _SlugStatus.taken) return 'Name already taken';
+                    if (_slug.isEmpty) return l10n.validationEmptyFolderName;
+                    if (_slugStatus == _SlugStatus.taken) {
+                      return l10n.validationNameTaken;
+                    }
                     return null;
                   },
                 ),
@@ -151,17 +158,14 @@ class _CreateEditModDialogState extends State<CreateEditModDialog> {
                 const SizedBox(height: 24),
               ],
               OutlinedButton.icon(
-
-                onPressed: (_isEditMode || _slug.isNotEmpty) ? _importFiles : null,
+                onPressed:
+                    (_isEditMode || _slug.isNotEmpty) ? _importFiles : null,
                 icon: const Icon(Icons.upload_file),
-                label: const Text('Import files'),
+                label: Text(l10n.importFilesButton),
               ),
               const SizedBox(height: 8),
               Text(
-                'Tip: after extracting your mod archive you can also move the files '
-                'manually to:\n'
-                '${widget.baseDir.path}/'
-                '${_isEditMode ? widget.existingMod!.path : (_slug.isNotEmpty ? _slug : '<folder>')}/',
+                l10n.importFilesTip('${widget.baseDir.path}/$folderForTip/'),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -171,13 +175,13 @@ class _CreateEditModDialogState extends State<CreateEditModDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(l10n.buttonCancel),
         ),
         FilledButton(
           onPressed: (_isEditMode || _slugStatus == _SlugStatus.available)
               ? _save
               : null,
-          child: Text(_isEditMode ? 'Done' : 'Add'),
+          child: Text(_isEditMode ? l10n.buttonDone : l10n.buttonAdd),
         ),
       ],
     );
@@ -193,6 +197,8 @@ class _SlugPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (slug.isEmpty) return const SizedBox.shrink();
+
+    final l10n = AppLocalizations.of(context);
 
     final Widget statusIcon = switch (status) {
       _SlugStatus.checking => const SizedBox(
@@ -214,14 +220,15 @@ class _SlugPreview extends StatelessWidget {
     };
 
     final String statusLabel = switch (status) {
-      _SlugStatus.available => 'Available',
-      _SlugStatus.taken => 'Name already taken',
+      _SlugStatus.available => l10n.slugAvailable,
+      _SlugStatus.taken => l10n.slugTaken,
       _ => '',
     };
 
     return Row(
       children: [
-        Text('Folder: ', style: Theme.of(context).textTheme.bodySmall),
+        Text(l10n.slugFolderPrefix,
+            style: Theme.of(context).textTheme.bodySmall),
         Text(
           '$slug/',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(

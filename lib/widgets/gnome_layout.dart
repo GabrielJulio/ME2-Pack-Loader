@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/mod_service.dart';
 import 'external_dll_list.dart';
+import 'language_selector.dart';
 import 'mod_list.dart';
 import 'settings_panel.dart';
 
@@ -80,31 +82,31 @@ class _GnomeLayoutState extends State<GnomeLayout> {
             selectedIndex: _selectedIndex,
             onDestinationSelected: (i) => setState(() => _selectedIndex = i),
             labelType: NavigationRailLabelType.selected,
-            destinations: const [
+            destinations: [
               NavigationRailDestination(
-                icon: Icon(Icons.extension_outlined),
-                selectedIcon: Icon(Icons.extension),
-                label: Text('Mods'),
+                icon: const Icon(Icons.extension_outlined),
+                selectedIcon: const Icon(Icons.extension),
+                label: Text(AppLocalizations.of(context).navMods),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('Settings'),
+                icon: const Icon(Icons.settings_outlined),
+                selectedIcon: const Icon(Icons.settings),
+                label: Text(AppLocalizations.of(context).navSettings),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.code_outlined),
-                selectedIcon: Icon(Icons.code),
-                label: Text('External DLLs'),
+                icon: const Icon(Icons.code_outlined),
+                selectedIcon: const Icon(Icons.code),
+                label: Text(AppLocalizations.of(context).navExternalDlls),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.bug_report_outlined),
-                selectedIcon: Icon(Icons.bug_report),
-                label: Text('Debug'),
+                icon: const Icon(Icons.bug_report_outlined),
+                selectedIcon: const Icon(Icons.bug_report),
+                label: Text(AppLocalizations.of(context).navDebug),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.info_outlined),
-                selectedIcon: Icon(Icons.info),
-                label: Text('About'),
+                icon: const Icon(Icons.info_outlined),
+                selectedIcon: const Icon(Icons.info),
+                label: Text(AppLocalizations.of(context).navAbout),
               ),
             ],
           ),
@@ -130,6 +132,7 @@ class _GnomeLayoutState extends State<GnomeLayout> {
 class _SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 480),
@@ -138,7 +141,8 @@ class _SettingsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Settings', style: Theme.of(context).textTheme.headlineSmall),
+              Text(l10n.headerSettings,
+                  style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 16),
               const SettingsPanel(hideDebug: true),
             ],
@@ -155,6 +159,7 @@ class _DllsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 480),
@@ -163,7 +168,8 @@ class _DllsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('External DLLs', style: Theme.of(context).textTheme.headlineSmall),
+              Text(l10n.headerExternalDlls,
+                  style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 16),
               ExternalDllList(baseDir: baseDir),
             ],
@@ -177,6 +183,7 @@ class _DllsPage extends StatelessWidget {
 class _DebugPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 480),
@@ -185,10 +192,11 @@ class _DebugPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Debug', style: Theme.of(context).textTheme.headlineSmall),
+              Text(l10n.headerDebug,
+                  style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 8),
               Text(
-                'Developer options. Disable before playing online.',
+                l10n.debugPageDescription,
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
@@ -209,6 +217,7 @@ class _AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 480),
@@ -228,13 +237,13 @@ class _AboutPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'ME2 Pack Loader',
+                        l10n.appTitle,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
                       ),
                       Text(
-                        'v1.0.0',
+                        l10n.aboutVersion,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -246,15 +255,14 @@ class _AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                'A GUI for managing ModEngine2 mod packs for FromSoftware games.',
+                l10n.aboutDescription,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
               const Divider(color: _border),
               const SizedBox(height: 16),
               Text(
-                'Unofficial community tool. Not affiliated with FromSoftware, '
-                'Bandai Namco, or the ModEngine2 team.',
+                l10n.aboutUnofficial,
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
@@ -262,12 +270,16 @@ class _AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '⚠ Always play offline when using mods to avoid Easy Anti-Cheat bans.',
+                l10n.aboutOnlineWarning,
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
                     ?.copyWith(color: _error),
               ),
+              const SizedBox(height: 24),
+              const Divider(color: _border),
+              const SizedBox(height: 16),
+              const LanguageSelector(),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/mod.dart';
 
 class ModListTile extends StatelessWidget {
@@ -22,6 +23,7 @@ class ModListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ListTile(
       leading: ReorderableDragStartListener(
         index: index,
@@ -33,7 +35,7 @@ class ModListTile extends StatelessWidget {
           if (isFolderEmpty) ...[
             const SizedBox(width: 8),
             Tooltip(
-              message: 'Folder is empty — add files before enabling',
+              message: l10n.modFolderEmptyTooltip,
               child: Icon(
                 Icons.warning_amber_rounded,
                 size: 18,
@@ -49,17 +51,16 @@ class ModListTile extends StatelessWidget {
         children: [
           Switch(
             value: mod.enabled,
-
             onChanged: isFolderEmpty ? null : (_) => onToggle(),
           ),
           IconButton(
             icon: const Icon(Icons.upload_file_outlined, size: 20),
-            tooltip: 'Import files',
+            tooltip: l10n.importFilesTooltip,
             onPressed: onEdit,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline, size: 20),
-            tooltip: 'Delete mod',
+            tooltip: l10n.deleteModTooltip,
             onPressed: onDelete,
           ),
         ],

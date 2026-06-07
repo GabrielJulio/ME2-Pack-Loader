@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'bloc/locale/locale_bloc.dart';
+import 'bloc/locale/locale_event.dart';
+import 'bloc/locale/locale_state.dart';
 import 'bloc/setup/setup_bloc.dart';
 import 'bloc/setup/setup_event.dart';
 import 'bloc/setup/setup_state.dart';
+import 'l10n/app_localizations.dart';
 import 'screens/home_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'services/preferences_service.dart';
@@ -91,25 +95,46 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SetupBloc(preferencesService: PreferencesService())
-        ..add(SetupStarted()),
-      child: MaterialApp(
-        title: 'ME2 Pack Loader',
-        debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.dark,
-        darkTheme: _buildTheme(),
-        home: BlocBuilder<SetupBloc, SetupState>(
-          builder: (context, state) {
-            if (state is SetupNeedsFolder) return const OnboardingScreen();
-            if (state is SetupComplete) {
-              return HomeScreen(modEngineDir: state.modEngineDir);
-            }
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => SetupBloc(preferencesService: PreferencesService())
+            ..add(SetupStarted()),
         ),
+        BlocProvider(
+          create: (_) => LocaleBloc(
+            preferencesService: PreferencesService(),
+            systemLocalesProvider: () =>
+                WidgetsBinding.instance.platformDispatcher.locales,
+          )..add(LocaleStarted()),
+        ),
+      ],
+      child: BlocBuilder<LocaleBloc, LocaleState>(
+        builder: (context, localeState) {
+          final locale = localeState is LocaleLoaded
+              ? Locale(localeState.code)
+              : null;
+          return MaterialApp(
+            title: 'ME2 Pack Loader',
+            debugShowCheckedModeBanner: false,
+            themeMode: ThemeMode.dark,
+            darkTheme: _buildTheme(),
+            locale: locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: BlocBuilder<SetupBloc, SetupState>(
+              builder: (context, state) {
+                if (state is SetupNeedsFolder) return const OnboardingScreen();
+                if (state is SetupComplete) {
+                  return HomeScreen(modEngineDir: state.modEngineDir);
+                }
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

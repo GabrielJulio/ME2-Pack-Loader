@@ -5,6 +5,10 @@ APPNAME="ME2-Pack-Loader"
 BINARY="me2_pack_loader"
 APPDIR="AppDir"
 ICON="packaging/${BINARY}.png"
+ME2_VENDOR_DIR="vendor/modengine2"
+
+echo "→ Fetching ModEngine2 pre-cache..."
+bash scripts/fetch_modengine2.sh
 
 echo "→ Building Flutter release..."
 flutter build linux --release
@@ -14,13 +18,17 @@ rm -rf "$APPDIR"
 mkdir -p \
   "$APPDIR/usr/bin" \
   "$APPDIR/usr/lib" \
-  "$APPDIR/usr/share/icons/hicolor/256x256/apps"
+  "$APPDIR/usr/share/icons/hicolor/256x256/apps" \
+  "$APPDIR/usr/share/modengine2"
 
 cp -r build/linux/x64/release/bundle/. "$APPDIR/usr/"
 
 mv "$APPDIR/usr/$BINARY" "$APPDIR/usr/bin/$BINARY"
 
 cp "packaging/${BINARY}.desktop" "$APPDIR/"
+
+echo "→ Copying ModEngine2 pre-cache into AppDir..."
+cp -r "$ME2_VENDOR_DIR/." "$APPDIR/usr/share/modengine2/"
 
 if [[ -f "$ICON" ]]; then
   cp "$ICON" "$APPDIR/usr/share/icons/hicolor/256x256/apps/${BINARY}.png"

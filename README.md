@@ -4,6 +4,8 @@
 
 A Flutter desktop GUI for managing [ModEngine2](https://github.com/soulsmods/ModEngine2) mod packs for FromSoftware games. Acts as a Steam wrapper — when launched through Steam, it lets you enable/disable mods, reorder them, and configure ModEngine2 settings, all without manually editing TOML files.
 
+> Read in [Português (Brasil)](./README.pt-BR.md).
+
 > For contributors / AI agents — start with [AGENTS.md](./AGENTS.md).
 
 ## Games supported

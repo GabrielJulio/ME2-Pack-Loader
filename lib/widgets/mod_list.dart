@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/config/config_bloc.dart';
 import '../bloc/config/config_event.dart';
 import '../bloc/config/config_state.dart';
+import '../l10n/app_localizations.dart';
 import '../models/mod.dart';
 import '../services/mod_service.dart';
 import 'create_edit_mod_dialog.dart';
@@ -24,6 +25,7 @@ class ModList extends StatelessWidget {
       builder: (context, state) {
         if (state is! ConfigLoaded) return const SizedBox.shrink();
 
+        final l10n = AppLocalizations.of(context);
         final mods = state.config.mods;
         final bloc = context.read<ConfigBloc>();
 
@@ -35,11 +37,12 @@ class ModList extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 12, 8, 4),
               child: Row(
                 children: [
-                  Text('Mods', style: Theme.of(context).textTheme.titleMedium),
+                  Text(l10n.headerMods,
+                      style: Theme.of(context).textTheme.titleMedium),
                   const Spacer(),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    tooltip: 'Add mod',
+                    tooltip: l10n.addModTooltip,
                     onPressed: () => _showCreateDialog(context, bloc),
                   ),
                 ],
@@ -51,7 +54,7 @@ class ModList extends StatelessWidget {
               child: mods.isEmpty
                   ? Center(
                       child: Text(
-                        'No mods yet.\nPress + to add one.',
+                        l10n.noModsYet,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: Theme.of(context).colorScheme.outline,

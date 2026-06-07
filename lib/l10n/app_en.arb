@@ -1,0 +1,113 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "ME2 Pack Loader",
+  "@appTitle": { "description": "App's display name. Brand name — usually not translated." },
+
+  "appTagline": "Manage your ModEngine2 mod packs.",
+  "@appTagline": { "description": "Short description shown on the onboarding screen." },
+
+  "onboardingSelectFolder": "Select the folder where ModEngine2 is installed.",
+  "onboardingChooseFolderButton": "Choose ModEngine2 folder",
+  "onboardingPickerDialog": "Select your ModEngine2 folder",
+
+  "languageLabel": "Language",
+
+  "navMods": "Mods",
+  "navSettings": "Settings",
+  "navExternalDlls": "External DLLs",
+  "navDebug": "Debug",
+  "navAbout": "About",
+
+  "headerSettings": "Settings",
+  "headerExternalDlls": "External DLLs",
+  "headerMods": "Mods",
+  "headerDebug": "Debug",
+
+  "settingModLoader": "Mod Loader",
+  "settingLooseParams": "Loose Params",
+  "settingScyllaHide": "Scylla Hide",
+  "settingDebugMode": "Debug Mode",
+  "settingDebugModeSubtitle": "Developer option — disable for normal play",
+
+  "debugPageDescription": "Developer options. Disable before playing online.",
+
+  "noDllsAdded": "No DLLs added",
+  "addDllTooltip": "Add DLL",
+  "removeTooltip": "Remove",
+  "dllOutsideFolderError": "DLL must be inside the ModEngine2 folder.",
+
+  "noModsYet": "No mods yet.\nPress + to add one.",
+  "addModTooltip": "Add mod",
+  "importFilesTooltip": "Import files",
+  "deleteModTooltip": "Delete mod",
+  "modFolderEmptyTooltip": "Folder is empty — add files before enabling",
+
+  "addModTitle": "Add mod",
+  "importFilesForMod": "Import files — {name}",
+  "@importFilesForMod": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "modNameLabel": "Mod name",
+  "modNameHint": "e.g. My Texture Pack",
+  "validationNameRequired": "Name is required",
+  "validationEmptyFolderName": "Name produces an empty folder name",
+  "validationNameTaken": "Name already taken",
+  "slugFolderPrefix": "Folder: ",
+  "slugAvailable": "Available",
+  "slugTaken": "Name already taken",
+  "slugFolderPlaceholder": "<folder>",
+  "importFilesButton": "Import files",
+  "importFilesTip": "Tip: after extracting your mod archive you can also move the files manually to:\n{path}",
+  "@importFilesTip": {
+    "placeholders": { "path": { "type": "String" } }
+  },
+  "filesImported": "{count} file(s) imported to {path}/",
+  "@filesImported": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "path": { "type": "String" }
+    }
+  },
+
+  "deleteModDialogTitle": "Delete mod?",
+  "deleteModDialogBodyBefore": "This will permanently delete the folder and all its files for ",
+  "deleteModDialogBodyAfter": ". This cannot be undone.",
+
+  "buttonCancel": "Cancel",
+  "buttonDelete": "Delete",
+  "buttonDone": "Done",
+  "buttonAdd": "Add",
+  "buttonRetry": "Retry",
+
+  "launchGameButton": "Launch Game",
+  "launchGameDisabledTooltip": "Configure Steam launch options first",
+  "setUpSteamButton": "Set up Steam",
+
+  "switchLayoutTooltip": "Switch layout",
+  "layoutDefaultName": "Default",
+  "layoutGnomeName": "GNOME",
+  "gameComingSoonTooltip": "Coming in a future update",
+
+  "darkSouls3": "Dark Souls III",
+
+  "configLoadFailed": "Failed to load config: {error}",
+  "@configLoadFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "configSaveFailed": "Failed to save config: {error}",
+  "@configSaveFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "aboutVersion": "v1.0.0",
+  "aboutDescription": "A GUI for managing ModEngine2 mod packs for FromSoftware games.",
+  "aboutUnofficial": "Unofficial community tool. Not affiliated with FromSoftware, Bandai Namco, or the ModEngine2 team.",
+  "aboutOnlineWarning": "⚠ Always play offline when using mods to avoid Easy Anti-Cheat bans.",
+
+  "steamSetupTitle": "Set up Steam",
+  "steamSetupHeading": "Add ME2 Pack Loader to Steam",
+  "steamSetupInstructions": "1. Open Steam\n2. Right-click Dark Souls III in your library\n3. Choose Properties → Launch Options\n4. Paste the command below and click OK",
+  "copyToClipboardTooltip": "Copy to clipboard",
+  "copiedToClipboard": "Copied to clipboard"
+}

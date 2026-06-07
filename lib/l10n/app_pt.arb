@@ -1,0 +1,92 @@
+{
+  "@@locale": "pt",
+
+  "appTitle": "ME2 Pack Loader",
+  "appTagline": "Gerencie seus pacotes de mods do ModEngine2.",
+
+  "onboardingSelectFolder": "Selecione a pasta onde o ModEngine2 está instalado.",
+  "onboardingChooseFolderButton": "Escolher pasta do ModEngine2",
+  "onboardingPickerDialog": "Selecione sua pasta do ModEngine2",
+
+  "languageLabel": "Idioma",
+
+  "navMods": "Mods",
+  "navSettings": "Configurações",
+  "navExternalDlls": "DLLs externas",
+  "navDebug": "Depuração",
+  "navAbout": "Sobre",
+
+  "headerSettings": "Configurações",
+  "headerExternalDlls": "DLLs externas",
+  "headerMods": "Mods",
+  "headerDebug": "Depuração",
+
+  "settingModLoader": "Carregador de mods",
+  "settingLooseParams": "Loose Params",
+  "settingScyllaHide": "Scylla Hide",
+  "settingDebugMode": "Modo de depuração",
+  "settingDebugModeSubtitle": "Opção de desenvolvedor — desative para jogar normalmente",
+
+  "debugPageDescription": "Opções de desenvolvedor. Desative antes de jogar online.",
+
+  "noDllsAdded": "Nenhuma DLL adicionada",
+  "addDllTooltip": "Adicionar DLL",
+  "removeTooltip": "Remover",
+  "dllOutsideFolderError": "A DLL precisa estar dentro da pasta do ModEngine2.",
+
+  "noModsYet": "Nenhum mod ainda.\nClique em + para adicionar um.",
+  "addModTooltip": "Adicionar mod",
+  "importFilesTooltip": "Importar arquivos",
+  "deleteModTooltip": "Excluir mod",
+  "modFolderEmptyTooltip": "A pasta está vazia — adicione arquivos antes de ativar",
+
+  "addModTitle": "Adicionar mod",
+  "importFilesForMod": "Importar arquivos — {name}",
+  "modNameLabel": "Nome do mod",
+  "modNameHint": "ex.: Meu Pack de Texturas",
+  "validationNameRequired": "O nome é obrigatório",
+  "validationEmptyFolderName": "O nome resulta em um nome de pasta vazio",
+  "validationNameTaken": "Esse nome já está em uso",
+  "slugFolderPrefix": "Pasta: ",
+  "slugAvailable": "Disponível",
+  "slugTaken": "Esse nome já está em uso",
+  "slugFolderPlaceholder": "<pasta>",
+  "importFilesButton": "Importar arquivos",
+  "importFilesTip": "Dica: depois de extrair o arquivo do mod, você também pode mover os arquivos manualmente para:\n{path}",
+  "filesImported": "{count} arquivo(s) importado(s) para {path}/",
+
+  "deleteModDialogTitle": "Excluir mod?",
+  "deleteModDialogBodyBefore": "Isto excluirá permanentemente a pasta e todos os arquivos de ",
+  "deleteModDialogBodyAfter": ". Esta ação não pode ser desfeita.",
+
+  "buttonCancel": "Cancelar",
+  "buttonDelete": "Excluir",
+  "buttonDone": "Concluído",
+  "buttonAdd": "Adicionar",
+  "buttonRetry": "Tentar novamente",
+
+  "launchGameButton": "Iniciar jogo",
+  "launchGameDisabledTooltip": "Configure as opções de inicialização do Steam primeiro",
+  "setUpSteamButton": "Configurar Steam",
+
+  "switchLayoutTooltip": "Trocar layout",
+  "layoutDefaultName": "Padrão",
+  "layoutGnomeName": "GNOME",
+  "gameComingSoonTooltip": "Em breve em uma atualização futura",
+
+  "darkSouls3": "Dark Souls III",
+
+  "configLoadFailed": "Falha ao carregar a configuração: {error}",
+  "configSaveFailed": "Falha ao salvar a configuração: {error}",
+
+  "aboutVersion": "v1.0.0",
+  "aboutDescription": "Uma interface gráfica para gerenciar pacotes de mods do ModEngine2 para jogos da FromSoftware.",
+  "aboutUnofficial": "Ferramenta não oficial feita pela comunidade. Sem afiliação com FromSoftware, Bandai Namco ou a equipe do ModEngine2.",
+  "aboutOnlineWarning": "⚠ Sempre jogue offline ao usar mods para evitar banimentos do Easy Anti-Cheat.",
+
+  "steamSetupTitle": "Configurar Steam",
+  "steamSetupHeading": "Adicionar o ME2 Pack Loader ao Steam",
+  "steamSetupInstructions": "1. Abra o Steam\n2. Clique com o botão direito em Dark Souls III na sua biblioteca\n3. Escolha Propriedades → Opções de inicialização\n4. Cole o comando abaixo e clique em OK",
+  "copyToClipboardTooltip": "Copiar para a área de transferência",
+  "copiedToClipboard": "Copiado para a área de transferência"
+}

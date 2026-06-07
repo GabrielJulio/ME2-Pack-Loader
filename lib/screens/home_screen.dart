@@ -9,12 +9,14 @@ import '../bloc/config/config_state.dart';
 import '../bloc/layout/layout_bloc.dart';
 import '../bloc/layout/layout_event.dart';
 import '../bloc/layout/layout_state.dart';
+import '../l10n/app_localizations.dart';
 import '../models/layout_type.dart';
 import '../services/config_service.dart';
 import '../services/mod_service.dart';
 import '../services/preferences_service.dart';
 import '../widgets/external_dll_list.dart';
 import '../widgets/gnome_layout.dart';
+import '../widgets/language_selector.dart';
 import '../widgets/mod_list.dart';
 import '../widgets/settings_panel.dart';
 import 'steam_setup_screen.dart';
@@ -49,9 +51,10 @@ class _HomeShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ME2 Pack Loader'),
+        title: Text(l10n.appTitle),
         actions: [
           _LayoutSwitcher(),
           _LaunchGameButton(
@@ -132,6 +135,8 @@ class _DefaultLayout extends StatelessWidget {
                   const SettingsPanel(),
                   const Divider(),
                   ExternalDllList(baseDir: baseDir),
+                  const Divider(),
+                  const LanguageSelector(),
                 ],
               ),
             ),
@@ -148,11 +153,12 @@ class _DefaultLayout extends StatelessWidget {
 class _LayoutSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return BlocBuilder<LayoutBloc, LayoutState>(
       builder: (context, state) {
         return PopupMenuButton<LayoutType>(
           icon: const Icon(Icons.dashboard_customize_outlined),
-          tooltip: 'Switch layout',
+          tooltip: l10n.switchLayoutTooltip,
           onSelected: (type) =>
               context.read<LayoutBloc>().add(LayoutSelected(type)),
           itemBuilder: (_) => [
@@ -160,13 +166,13 @@ class _LayoutSwitcher extends StatelessWidget {
               type: LayoutType.defaultMaterial,
               current: state.type,
               icon: Icons.view_sidebar_outlined,
-              label: 'Default',
+              label: l10n.layoutDefaultName,
             ),
             _layoutMenuItem(
               type: LayoutType.gnome,
               current: state.type,
               icon: Icons.view_list_outlined,
-              label: 'GNOME',
+              label: l10n.layoutGnomeName,
             ),
           ],
         );
@@ -201,6 +207,7 @@ class _ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -209,7 +216,7 @@ class _ErrorView extends StatelessWidget {
           const SizedBox(height: 16),
           Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 16),
-          FilledButton(onPressed: onRetry, child: const Text('Retry')),
+          FilledButton(onPressed: onRetry, child: Text(l10n.buttonRetry)),
         ],
       ),
     );
@@ -217,14 +224,14 @@ class _ErrorView extends StatelessWidget {
 }
 
 class _GameSelector extends StatelessWidget {
-  static const _games = ['Dark Souls III'];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final games = [l10n.darkSouls3];
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: DropdownButtonFormField<String>(
-        initialValue: _games.first,
+        initialValue: games.first,
         decoration: const InputDecoration(
           prefixIcon: Icon(Icons.sports_esports, size: 20),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -232,15 +239,15 @@ class _GameSelector extends StatelessWidget {
           isDense: true,
         ),
         items: [
-          ..._games.map(
+          ...games.map(
             (g) => DropdownMenuItem(value: g, child: Text(g)),
           ),
-          const DropdownMenuItem(
+          DropdownMenuItem(
             enabled: false,
             value: null,
             child: Tooltip(
-              message: 'Coming in a future update',
-              child: Text('Elden Ring', style: TextStyle(fontSize: 13)),
+              message: l10n.gameComingSoonTooltip,
+              child: const Text('Elden Ring', style: TextStyle(fontSize: 13)),
             ),
           ),
         ],
@@ -257,21 +264,22 @@ class _LaunchGameButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Tooltip(
-          message: 'Configure Steam launch options first',
+          message: l10n.launchGameDisabledTooltip,
           child: FilledButton.tonalIcon(
             onPressed: null,
             icon: const Icon(Icons.rocket_launch),
-            label: const Text('Launch Game'),
+            label: Text(l10n.launchGameButton),
           ),
         ),
         const SizedBox(width: 4),
         TextButton(
           onPressed: onSetupTap,
-          child: const Text('Set up Steam'),
+          child: Text(l10n.setUpSteamButton),
         ),
       ],
     );

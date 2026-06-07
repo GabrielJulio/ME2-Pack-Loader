@@ -4,6 +4,7 @@ class PreferencesService {
   static const _keyModEngineDir = 'mod_engine_dir';
   static const _keySteamCommandShown = 'steam_command_shown';
   static const _keyLayout = 'layout';
+  static const _keyLocale = 'locale';
 
   Future<String?> getModEngineDir() async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,5 +34,15 @@ class PreferencesService {
   Future<void> setLayout(String value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyLayout, value);
+  }
+
+  Future<String?> getLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyLocale);
+  }
+
+  Future<void> setLocale(String code) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyLocale, code);
   }
 }
