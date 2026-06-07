@@ -1,14 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart' as p;
 
 import '../../models/game_config.dart';
 import '../../services/config_service.dart';
+import '../../services/pack_service.dart';
 import 'config_event.dart';
 import 'config_state.dart';
 
 class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   final ConfigService configService;
+  final PackService packService;
 
-  ConfigBloc({required this.configService}) : super(ConfigInitial()) {
+  ConfigBloc({
+    required this.configService,
+    PackService? packService,
+  })  : packService = packService ?? PackService(),
+        super(ConfigInitial()) {
     on<ConfigLoadRequested>(_onLoadRequested);
     on<ModToggled>(_onModToggled);
     on<ModReordered>(_onModReordered);
@@ -30,10 +39,23 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   ) async {
     emit(ConfigLoading());
     try {
-      final file = await configService.resolveConfig(event.baseDir);
-      final config = await configService.read(file);
-      await configService.touch(file);
-      emit(ConfigLoaded(config: config, configFile: file, baseDir: event.baseDir));
+      final packs = await packService.list(event.baseDir);
+      if (packs.isEmpty) {
+        emit(ConfigError(
+          'No packs found in ${event.baseDir.path}. '
+          'The game folder must be initialized first.',
+        ));
+        return;
+      }
+      final pack = packs.first;
+      final config = await configService.read(pack.file);
+      await configService.touch(pack.file);
+      emit(ConfigLoaded(
+        config: config,
+        configFile: pack.file,
+        baseDir: event.baseDir,
+        packSlug: pack.slug,
+      ));
     } catch (e) {
       emit(ConfigError('Failed to load config: $e'));
     }
@@ -51,7 +73,6 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   Future<void> _onModReordered(ModReordered event, Emitter<ConfigState> emit) =>
       _update(emit, (loaded) {
         final mods = List.of(loaded.config.mods);
-
         var newIndex = event.newIndex;
         if (newIndex > event.oldIndex) newIndex -= 1;
         final item = mods.removeAt(event.oldIndex);
@@ -101,7 +122,8 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
       });
 
   Future<void> _onDebugToggled(DebugToggled event, Emitter<ConfigState> emit) =>
-      _update(emit, (loaded) => loaded.config.copyWith(debug: !loaded.config.debug));
+      _update(emit,
+          (loaded) => loaded.config.copyWith(debug: !loaded.config.debug));
 
   Future<void> _onModLoaderEnabledToggled(
     ModLoaderEnabledToggled event,
@@ -137,10 +159,17 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
     try {
       final newConfig = updater(current);
       await configService.write(current.configFile, newConfig);
+      // Mirror to config.toml so the launcher always sees the latest edits
+      // of the active pack. (MVP: editing == active.)
+      final mirror = File(
+        p.join(current.baseDir.path, PackService.activeFileName),
+      );
+      await configService.write(mirror, newConfig);
       emit(ConfigLoaded(
         config: newConfig,
         configFile: current.configFile,
         baseDir: current.baseDir,
+        packSlug: current.packSlug,
       ));
     } catch (e) {
       emit(ConfigError('Failed to save config: $e'));
