@@ -1,4 +1,4 @@
-# 06 — Steam Launch Command
+# 07 — Steam Launch Command
 
 ## Context
 

@@ -1,5 +1,7 @@
-# Single packs root with auto-created game subfolders
+# Single data dir, movable between disks
 
-The user picks **one** directory at onboarding (the "packs root"). The app creates one subfolder per game beneath it (`ds3/`, `er/`, `dsr/`) as games are activated. The user cannot point each game at a separate folder.
+All game folders live under one **data dir**. The user does not point each game at a separate folder. The data dir defaults to inside the app folder (same disk as the app), and the user can override it to any folder on any disk — typically to keep multi-gigabyte mods off the system drive.
 
-Considered alternative: one folder per game (user picks each one separately). Rejected because it triples onboarding friction, complicates settings UI, and the only real use-case (different drives per game) is rare. If we add it later, it would extend the model rather than break it: the packs root becomes a default, with per-game overrides stored in prefs.
+Considered alternative: one folder per game (user picks each one separately). Rejected because it triples onboarding friction and the only real use-case (different drives per game) is rare; the actual concern is "mods on the system drive vs a data drive", which is satisfied by a single movable data dir.
+
+Moving the data dir (initial pick to non-default, switching between custom locations, or returning to default) is a deliberate user action gated by a disk-space check.

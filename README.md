@@ -4,18 +4,49 @@
 
 A Flutter desktop GUI for managing [ModEngine2](https://github.com/soulsmods/ModEngine2) mod packs for FromSoftware games. Acts as a Steam wrapper — when launched through Steam, it lets you enable/disable mods, reorder them, and configure ModEngine2 settings, all without manually editing TOML files.
 
-## Major Objectives
+> For contributors / AI agents — start with [AGENTS.md](./AGENTS.md).
 
-| Objective | Status |
+## Games supported
+
+| Game | Status |
 |---|---|
-| Support Dark Souls 3 | ✅ Done |
-| Support Bazzite (Linux) | ✅ Done |
-| Multiple UI layouts | ✅ Done |
-| App icon | ✅ Done |
-| ME2 Obsidian theme + Inter font | ✅ Done |
-| Support Elden Ring | ⬜ Planned |
-| AppImage with auto-updates via GitHub releases | ⬜ Planned |
-| Support Windows | ⬜ Planned |
+| Dark Souls III | ✅ |
+| Elden Ring | ✅ |
+| Dark Souls: Remastered | 🚧 Planned |
+
+## Features
+
+- Mod folder management — add, rename, delete
+- Enable, disable, and reorder mods (load order matters)
+- External DLL management (e.g. SeamlessCoop)
+- ModEngine2 settings toggles (loose params, debug mode, Scylla Hide)
+- Material and GNOME themes
+- Runs on Linux (Bazzite / Steam Deck / any distro with Proton)
+
+## Roadmap
+
+Decisions that shape the plans are recorded in [`docs/adr/`](./docs/adr/) and project terminology in [`CONTEXT.md`](./CONTEXT.md).
+
+### WIP
+
+Plans drafted and ready to execute. Each file is self-contained (Context / Goal / Approach / Files / Verification).
+
+| Objective | Plan |
+|---|---|
+| Bundle ModEngine2 (no user-supplied install) | [tasks/01](./tasks/01-bundled-modengine.md) |
+| Data directory management (default vs. custom disk) | [tasks/02](./tasks/02-data-dir-management.md) |
+| Multi-game support (Dark Souls III, Elden Ring, Dark Souls: Remastered) | [tasks/03](./tasks/03-multi-game-support.md) |
+| Mod packs (named TOMLs per game, activate flow) | [tasks/04](./tasks/04-mod-packs.md) |
+| Material red accent | [tasks/05](./tasks/05-material-red-accent.md) |
+| Desktop-aware theme (auto-detect GNOME accent) | [tasks/06](./tasks/06-desktop-aware-theme.md) |
+| Steam launch command (copy-paste with instructions) | [tasks/07](./tasks/07-steam-launch-command.md) |
+
+### Planned
+
+Future objectives without an implementation plan yet.
+
+- Support Windows (`.msi` installer)
+- AppImage with auto-updates via GitHub releases
 
 ## Known Bugs
 
@@ -23,19 +54,14 @@ A Flutter desktop GUI for managing [ModEngine2](https://github.com/soulsmods/Mod
 
 ## How it works
 
-ME2-Pack-Loader reads and writes the ModEngine2 TOML config file. Each mod is a folder inside the ModEngine2 directory. The app lets you:
-
-- Add, rename, and delete mod folders
-- Enable or disable individual mods
-- Reorder mods (load order matters)
-- Manage external DLLs (e.g. SeamlessCoop)
-- Toggle ModEngine2 settings (loose params, debug mode, etc.)
+Each game has a **base directory** containing its mod folders and one or more **packs** (named TOML configs). A pack selects which mods are enabled and in what order. Activating a pack mirrors it into the game's `config.toml` — that's the file ModEngine2 actually reads, so the Steam launch command stays the same regardless of which pack is active.
 
 ## Requirements
 
-- [ModEngine2](https://github.com/soulsmods/ModEngine2)
 - Flutter (for building from source)
 - Linux (Bazzite / Steam Deck / any distro with Proton) — Windows support coming later
+
+ModEngine2 itself is bundled with the app, so you don't need to install it separately (see [tasks/01](./tasks/01-bundled-modengine.md)).
 
 ## Legal
 

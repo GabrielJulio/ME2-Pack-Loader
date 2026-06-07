@@ -1,4 +1,4 @@
-# 05 — Desktop-Aware Theme
+# 06 — Desktop-Aware Theme
 
 ## Context
 

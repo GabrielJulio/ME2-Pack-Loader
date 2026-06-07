@@ -27,11 +27,13 @@ The app always knows where to find a working ModEngine2 launcher. The user never
 
 CI / AppImage build runs this script before `flutter build linux`.
 
-### Runtime location (cross-platform via `path_provider`)
+### Runtime location (always the ME2 folder)
 
-Per ADR-0001, use the Flutter abstraction: `path_provider`'s `getApplicationSupportDirectory()`:
+The ME2 binary lives at `<app folder>/modengine2/`, fixed regardless of data dir choice (see [task 02](./02-data-dir-management.md)):
 - Linux: `~/.local/share/me2_pack_loader/modengine2/`
 - Windows: `%APPDATA%\me2_pack_loader\modengine2\`
+
+Per ADR-0001, the app folder is resolved via `path_provider`'s `getApplicationSupportDirectory()`.
 
 ### Population per platform
 
@@ -49,11 +51,11 @@ Same extraction logic on Linux and Windows: read pre-cache → write to support 
 
 `lib/services/modengine_locator.dart`:
 - `Future<Directory> resolve()`:
-  1. Compute support-dir path via `path_provider`.
+  1. Compute ME2 folder path (`<app folder>/modengine2/`).
   2. If `launcher.exe` present and `.version` matches pre-cache `.version` → return.
   3. Else locate pre-cache (`ME2_BUNDLE_DIR` env > `APPDIR/usr/share/modengine2` on Linux > install-dir on Windows).
-  4. Extract pre-cache → support dir. Write `.version`.
-  5. Return support-dir path.
+  4. Extract pre-cache → ME2 folder. Write `.version`.
+  5. Return ME2 folder path.
 - `Future<File> launcherExe()` → returns absolute path to `modengine2_launcher.exe`.
 - Caches the resolved path for the session.
 
@@ -73,7 +75,7 @@ Same extraction logic on Linux and Windows: read pre-cache → write to support 
 
 1. `bash scripts/fetch_modengine2.sh` → downloads, extracts, no errors on re-run.
 2. `flutter run -d linux` with `ME2_BUNDLE_DIR=<repo>/vendor/modengine2` → `ModEngineLocator` extracts to support dir and returns the launcher path.
-3. AppImage built and opened on a clean machine → ME2 extracted to `~/.local/share/me2_pack_loader/modengine2/`, launcher exe present.
+3. AppImage built and opened on a clean machine → ME2 extracted to the ME2 folder (`~/.local/share/me2_pack_loader/modengine2/`), launcher exe present.
 4. Re-launch → version files match → no re-extraction.
 5. Bump pre-cache version (simulate update) → re-extraction triggered, support dir refreshed.
-6. (When Windows MSI lands) Install → first launch extracts from `<install_dir>\modengine2\` to `%APPDATA%\me2_pack_loader\modengine2\`.
+6. (When Windows MSI lands) Install → first launch extracts from `<install_dir>\modengine2\` to the ME2 folder (`%APPDATA%\me2_pack_loader\modengine2\`).

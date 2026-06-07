@@ -24,20 +24,31 @@ _Avoid_: Mod, mod directory
 
 ### Locations
 
-**Packs root**:
-The single directory the user picks at onboarding, under which the app creates one subfolder per game. Each subfolder is that game's base directory.
-_Avoid_: Mod root, base directory (use "base directory" only when scoped to a specific game)
+**App folder**:
+The fixed-location, app-managed directory at `~/.local/share/me2_pack_loader/` (Linux) or `%APPDATA%\me2_pack_loader\` (Windows). Holds the bundled ModEngine2, the pointer config, and other internal state. Never moves.
+_Avoid_: AppData, support dir (those are platform-specific implementations)
 
-**Game base directory**:
-A subfolder of the packs root, dedicated to one game (`ds3/`, `er/`, `dsr/`). Holds that game's mod folders, packs, and `config.toml`.
-_Avoid_: Game folder, game dir
+**ME2 folder**:
+`<app folder>/modengine2/`. Contains the extracted ModEngine2 binary (launcher exe + its own DLLs) and, when the data dir is the default, the per-game subfolders directly underneath it.
+_Avoid_: Mod engine dir
+
+**Data dir**:
+The directory under which game folders live. Defaults to `<ME2 folder>` itself (so game folders nest inside the ME2 folder); the user can override to any folder on any disk, in which case games live at `<data dir>/me2_pack_loader/modengine2/<game>/`. Mobile — can be moved later from settings, with a disk-space check. The chosen path is stored in the pointer config.
+_Avoid_: Packs root, mods root
+
+**Game folder** (a.k.a. game base directory):
+The folder dedicated to one game, holding its mod folders, packs, and `config.toml`. Lives at `<data dir>/me2_pack_loader/modengine2/<game.slug>/` (or `<ME2 folder>/<game.slug>/` in the default-data-dir case).
+_Avoid_: Game dir, base dir
+
+**Pointer config**:
+A small JSON file in the app folder recording where the data dir currently lives. On launch, the app reads this; if the path is unreachable (disk removed), it prompts the user to relocate.
 
 **Bundled ModEngine2**:
-A single ModEngine2 build (DSR-compatible fork, also runs DS3 and ER) that ships with the app. The user cannot point at their own ModEngine2 install. Ships as a **pre-cache** inside the AppImage / `.msi` and is extracted into `path_provider`'s app-support directory on first launch (and re-extracted when the pre-cache's version differs).
+A single ModEngine2 build (DSR-compatible fork, also runs DS3 and ER) that ships with the app. The user cannot point at their own ModEngine2 install. Ships as a **pre-cache** inside the AppImage / `.msi` and is extracted into the ME2 folder on first launch (and re-extracted when the pre-cache's version differs).
 _Avoid_: User-supplied ModEngine2, external launcher
 
 **Pre-cache**:
-The ModEngine2 copy shipped inside the install package (AppImage bundle or MSI install dir). Read-only at runtime; the source for extraction into the writable support directory.
+The ModEngine2 copy shipped inside the install package (AppImage bundle or MSI install dir). Read-only at runtime; the source for extraction into the ME2 folder.
 
 ### Activation and games
 
