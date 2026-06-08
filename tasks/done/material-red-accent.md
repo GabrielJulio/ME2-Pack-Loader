@@ -1,4 +1,4 @@
-# 06 — Material Red Accent
+# Material Red Accent
 
 ## Context
 

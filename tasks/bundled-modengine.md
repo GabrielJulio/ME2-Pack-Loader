@@ -1,4 +1,4 @@
-# 01 — Bundled ModEngine2
+# Bundled ModEngine2
 
 ## Context
 
@@ -29,7 +29,7 @@ CI / AppImage build runs this script before `flutter build linux`.
 
 ### Runtime location (always the ME2 folder)
 
-The ME2 binary lives at `<app folder>/modengine2/`, fixed regardless of data dir choice (see [task 03](./03-data-dir-management.md)):
+The ME2 binary lives at `<app folder>/modengine2/`, fixed regardless of data dir choice (see [Data Directory Management](./done/data-dir-management.md)):
 - Linux: `~/.local/share/me2_pack_loader/modengine2/`
 - Windows: `%APPDATA%\me2_pack_loader\modengine2\`
 

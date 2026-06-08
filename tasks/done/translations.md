@@ -1,4 +1,4 @@
-# 02 — Translations (English + Brazilian Portuguese)
+# Translations (English + Brazilian Portuguese)
 
 ## Context
 

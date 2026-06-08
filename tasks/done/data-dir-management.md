@@ -1,4 +1,4 @@
-# 03 — Data Directory Management
+# Data Directory Management
 
 ## Context
 

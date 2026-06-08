@@ -24,7 +24,7 @@ ME2-Pack-Loader is a Flutter desktop GUI for managing [ModEngine2](https://githu
 - **Game names in user-facing text** (UI strings, README, error messages, dialogs) — always use the **full name**: "Dark Souls III", "Elden Ring", "Dark Souls: Remastered". Never use abbreviations like `DS3`, `ER`, `DSR` in anything the end user can see.
 - Abbreviations are fine in code identifiers, file/folder slugs, dev docs (tasks, ADRs, CONTEXT.md), and comments.
 - Follow [CONTEXT.md](./CONTEXT.md) for canonical domain terms (Pack, Active pack, Game folder, Data dir, etc.). When code or text uses a term that conflicts with the glossary, the glossary wins.
-- **User-facing strings live in ARB files**, not as hardcoded literals. Once [tasks/02](./tasks/02-translations.md) lands, every string the user sees comes from `lib/l10n/app_en.arb` + `lib/l10n/app_pt.arb`, accessed via `AppLocalizations.of(context)`. Any new user-facing text added by later tasks must extend both files in lockstep.
+- **User-facing strings live in ARB files**, not as hardcoded literals. Per the [Translations task](./tasks/done/translations.md), every string the user sees comes from `lib/l10n/app_en.arb` + `lib/l10n/app_pt.arb`, accessed via `AppLocalizations.of(context)`. Any new user-facing text added by later tasks must extend both files in lockstep.
 
 ## Platform abstraction
 
@@ -66,11 +66,11 @@ lib/
   utils/slugify.dart
 ```
 
-**Layout switching:** `HomeScreen` provides both `ConfigBloc` and `LayoutBloc`. A `PopupMenuButton` in the AppBar dispatches `LayoutSelected`; the body switches between `_DefaultLayout` (sidebar + main) and `GnomeLayout` (NavigationRail + pages). The choice is persisted via `PreferencesService`. (The user-visible switcher will be removed in [tasks/07](./tasks/07-desktop-aware-theme.md); the layouts themselves stay.)
+**Layout switching:** `HomeScreen` provides both `ConfigBloc` and `LayoutBloc`. A `PopupMenuButton` in the AppBar dispatches `LayoutSelected`; the body switches between `_DefaultLayout` (sidebar + main) and `GnomeLayout` (NavigationRail + pages). The choice is persisted via `PreferencesService`. (The user-visible switcher was removed per the [Desktop-Aware Theme task](./tasks/done/desktop-aware-theme.md); the layouts themselves stay.)
 
 **TOML writes:** Every `ConfigBloc` mutation calls `ConfigService.write` before emitting the new state — the file is always in sync with the UI.
 
-**Dev override:** Set `MODENGINE_DIR` env var to point at a real ModEngine2 folder while running with `flutter run`. (Will be replaced by `ME2_BUNDLE_DIR` per [tasks/01](./tasks/01-bundled-modengine.md).)
+**Dev override:** Set `MODENGINE_DIR` env var to point at a real ModEngine2 folder while running with `flutter run`. (Will be replaced by `ME2_BUNDLE_DIR` per the [Bundled ModEngine2 task](./tasks/bundled-modengine.md).)
 
 ## Commands
 

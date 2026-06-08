@@ -58,3 +58,20 @@ _Avoid_: Adding a game (use "activate")
 
 **Activate (a pack)**:
 Click action that copies the pack's contents into `config.toml`, making it the active pack for that game. Distinct from opening a pack for editing.
+
+### Run modes
+
+**Standalone mode**:
+The app launched directly (not via Steam). Full manager UI: data dir setup, game activation, pack management across all activated games. No game launch from here. CLI argv has no `--mode run` flag.
+_Avoid_: Manager mode (use "standalone mode")
+
+**Wrapper mode**:
+The app launched by Steam with `--game <slug> --mode run -- <launch-chain>`. UI is **locked to the named game** — the game switcher is read-only, only that game's packs are visible. Includes a prominent "Launch Game" action that spawns ModEngine2 with the captured launch chain and then exits the app immediately.
+_Avoid_: Steam mode, launch mode
+
+**Launch chain**:
+The expansion of Steam's `%command%` token, captured by the app's argv (everything after `--`) in wrapper mode. Includes Proton runtime + game executable path. The app uses it to subprocess ModEngine2 the same way Steam would have subprocessed the game.
+_Avoid_: Proton args, command suffix
+
+**Auto-launch pack**:
+A pack whose TOML has `[me2_pack_loader] auto_launch = true`. In wrapper mode, if the active pack of the locked game has this flag, the app skips the UI entirely and spawns ModEngine2 immediately. In standalone mode the user can toggle the flag per-pack.

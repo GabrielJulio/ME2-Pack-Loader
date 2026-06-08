@@ -12,37 +12,44 @@ A Flutter desktop GUI for managing [ModEngine2](https://github.com/soulsmods/Mod
 
 | Game | Status |
 |---|---|
-| Dark Souls III | ✅ |
-| Elden Ring | ✅ |
-| Dark Souls: Remastered | 🚧 Planned |
+| Dark Souls III | 🚧 Service layer ready, UI not wired |
+| Elden Ring | 🚧 Service layer ready, UI not wired |
+| Dark Souls: Remastered | 🚧 Service layer ready, UI not wired |
 
-## Features
+## Features the user can interact with today
 
 - Mod folder management — add, rename, delete
 - Enable, disable, and reorder mods (load order matters)
 - External DLL management (e.g. SeamlessCoop)
 - ModEngine2 settings toggles (loose params, debug mode, Scylla Hide)
-- Material and GNOME themes
+- Material and GNOME themes (auto-detected at startup)
+- Switch UI language between English and Brazilian Portuguese
 - Runs on Linux (Bazzite / Steam Deck / any distro with Proton)
+
+> **Important note about scope.** Multi-game switching, named mod packs, the new Steam wrapper, and the new data-dir picker are all built at the service + bloc + test layer but not yet exposed in the UI — see the "UI integration batch" in the [tasks/](./tasks/) folder. The bar for moving anything into the user-facing feature list above is "the user can use it end-to-end."
 
 ## Roadmap
 
-Decisions that shape the plans are recorded in [`docs/adr/`](./docs/adr/) and project terminology in [`CONTEXT.md`](./CONTEXT.md).
+Decisions that shape the plans are recorded in [`docs/adr/`](./docs/adr/), project terminology in [`CONTEXT.md`](./CONTEXT.md), and autonomous mid-execution calls in [`refactor.md`](./refactor.md).
 
-### WIP
+[`tasks/README.md`](./tasks/README.md) is the source of truth for execution order. Highlights:
 
-Plans drafted and ready to execute. Each file is self-contained (Context / Goal / Approach / Files / Verification).
+### Foundation (external blocker)
 
-| Objective | Plan |
-|---|---|
-| Bundle ModEngine2 (no user-supplied install) | [tasks/01](./tasks/01-bundled-modengine.md) |
-| Translations (English + Brazilian Portuguese) | [tasks/02](./tasks/02-translations.md) |
-| Data directory management (default vs. custom disk) | [tasks/03](./tasks/03-data-dir-management.md) |
-| Multi-game support (Dark Souls III, Elden Ring, Dark Souls: Remastered) | [tasks/04](./tasks/04-multi-game-support.md) |
-| Mod packs (named TOMLs per game, activate flow) | [tasks/05](./tasks/05-mod-packs.md) |
-| Material red accent | [tasks/06](./tasks/06-material-red-accent.md) |
-| Desktop-aware theme (auto-detect GNOME accent) | [tasks/07](./tasks/07-desktop-aware-theme.md) |
-| Steam launch command (copy-paste with instructions) | [tasks/08](./tasks/08-steam-launch-command.md) |
+- [Bundled ModEngine2](./tasks/bundled-modengine.md) — waiting on the upstream ModEngine2 fork URL.
+
+### UI integration batch (in dependency order)
+
+1. [New Onboarding + Startup Routing](./tasks/new-onboarding-and-startup-routing.md)
+2. [Multi-Game Activation Flow](./tasks/multi-game-activation-flow.md)
+3. [Pack List + Management UI](./tasks/pack-list-and-management.md)
+4. [Run Modes + Steam Wrapper](./tasks/run-modes-and-steam-wrapper.md)
+5. [Per-Pack Auto-Launch](./tasks/per-pack-auto-launch.md)
+
+Independent side-branches (parallelizable after #1):
+
+- [Missing Data-Dir Recovery](./tasks/missing-data-dir-recovery.md)
+- [App Preferences Screen](./tasks/app-preferences-screen.md)
 
 ### Planned
 
@@ -64,7 +71,7 @@ Each game has a **base directory** containing its mod folders and one or more **
 - Flutter (for building from source)
 - Linux (Bazzite / Steam Deck / any distro with Proton) — Windows support coming later
 
-ModEngine2 itself is bundled with the app, so you don't need to install it separately (see [tasks/01](./tasks/01-bundled-modengine.md)).
+ModEngine2 itself is bundled with the app, so you don't need to install it separately (see [Bundled ModEngine2](./tasks/bundled-modengine.md)).
 
 ## Legal
 

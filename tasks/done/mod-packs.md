@@ -1,4 +1,4 @@
-# 05 — Mod Packs
+# Mod Packs
 
 ## Context
 
@@ -32,7 +32,7 @@ Per-game pack management: list, create, activate, edit, rename, delete. The UI s
 
 On opening a game, load the **most-recently-modified `<slug>.toml`** into the editor. This is the UI default — it does not necessarily equal the active pack (which is `config.toml`'s mirror source).
 
-### First-run per game (from task 04)
+### First-run per game (from Multi-Game Support)
 
 If no packs exist, create `default.toml` and activate it (copy to `config.toml`).
 

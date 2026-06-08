@@ -1,4 +1,4 @@
-# 08 — Steam Launch Command
+# Steam Launch Command
 
 ## Context
 

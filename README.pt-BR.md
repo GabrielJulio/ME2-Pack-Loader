@@ -12,37 +12,44 @@ GUI desktop em Flutter para gerenciar pacotes de mods do [ModEngine2](https://gi
 
 | Jogo | Status |
 |---|---|
-| Dark Souls III | ✅ |
-| Elden Ring | ✅ |
-| Dark Souls: Remastered | 🚧 Planejado |
+| Dark Souls III | 🚧 Camada de serviços pronta, UI ainda não conectada |
+| Elden Ring | 🚧 Camada de serviços pronta, UI ainda não conectada |
+| Dark Souls: Remastered | 🚧 Camada de serviços pronta, UI ainda não conectada |
 
-## Funcionalidades
+## Funcionalidades disponíveis ao usuário hoje
 
 - Gerenciamento de pastas de mods — adicionar, renomear, excluir
 - Ativar, desativar e reordenar mods (a ordem de carregamento importa)
 - Gerenciamento de DLLs externas (ex.: SeamlessCoop)
 - Toggles das configurações do ModEngine2 (loose params, modo de depuração, Scylla Hide)
-- Temas Material e GNOME
+- Temas Material e GNOME (detectados automaticamente na inicialização)
+- Alternar o idioma da UI entre inglês e português do Brasil
 - Roda no Linux (Bazzite / Steam Deck / qualquer distro com Proton)
+
+> **Importante sobre o escopo.** Troca entre jogos, mod packs nomeados, o novo wrapper do Steam e o novo seletor de pasta de dados já existem na camada de serviços + bloc + testes, mas ainda não estão expostos na UI — veja o lote de "integração da UI" em [tasks/](./tasks/). A régua para entrar na lista de funcionalidades acima é "o usuário consegue usar de ponta a ponta".
 
 ## Roadmap
 
-As decisões que orientam os planos estão registradas em [`docs/adr/`](./docs/adr/) e a terminologia do projeto em [`CONTEXT.md`](./CONTEXT.md).
+As decisões que orientam os planos estão registradas em [`docs/adr/`](./docs/adr/), a terminologia do projeto em [`CONTEXT.md`](./CONTEXT.md) e as decisões autônomas de execução em [`refactor.md`](./refactor.md).
 
-### Em andamento (WIP)
+[`tasks/README.md`](./tasks/README.md) é a fonte da ordem de execução. Destaques:
 
-Planos elaborados e prontos para execução. Cada arquivo é autossuficiente (Contexto / Objetivo / Abordagem / Arquivos / Verificação).
+### Fundação (bloqueio externo)
 
-| Objetivo | Plano |
-|---|---|
-| Empacotar o ModEngine2 (sem instalação separada) | [tasks/01](./tasks/01-bundled-modengine.md) |
-| Traduções (inglês + português do Brasil) | [tasks/02](./tasks/02-translations.md) |
-| Gerenciamento do diretório de dados (padrão vs. disco personalizado) | [tasks/03](./tasks/03-data-dir-management.md) |
-| Suporte a múltiplos jogos (Dark Souls III, Elden Ring, Dark Souls: Remastered) | [tasks/04](./tasks/04-multi-game-support.md) |
-| Mod packs (TOMLs nomeados por jogo, fluxo de ativação) | [tasks/05](./tasks/05-mod-packs.md) |
-| Cor de destaque vermelha no Material | [tasks/06](./tasks/06-material-red-accent.md) |
-| Tema sensível ao desktop (detecção automática do destaque do GNOME) | [tasks/07](./tasks/07-desktop-aware-theme.md) |
-| Comando de inicialização do Steam (copia-e-cola com instruções) | [tasks/08](./tasks/08-steam-launch-command.md) |
+- [ModEngine2 empacotado](./tasks/bundled-modengine.md) — aguardando a URL do fork da comunidade.
+
+### Lote de integração da UI (em ordem de dependência)
+
+1. [Novo onboarding + roteamento de inicialização](./tasks/new-onboarding-and-startup-routing.md)
+2. [Fluxo de ativação de múltiplos jogos](./tasks/multi-game-activation-flow.md)
+3. [Lista de packs + gerenciamento](./tasks/pack-list-and-management.md)
+4. [Modos de execução + wrapper do Steam](./tasks/run-modes-and-steam-wrapper.md)
+5. [Auto-launch por pack](./tasks/per-pack-auto-launch.md)
+
+Ramos paralelos (podem ser feitos após o #1):
+
+- [Recuperação de pasta de dados ausente](./tasks/missing-data-dir-recovery.md)
+- [Tela de preferências do app](./tasks/app-preferences-screen.md)
 
 ### Planejado
 
@@ -64,7 +71,7 @@ Cada jogo tem um **diretório base** com suas pastas de mods e um ou mais **pack
 - Flutter (para compilar a partir do código-fonte)
 - Linux (Bazzite / Steam Deck / qualquer distro com Proton) — suporte ao Windows em breve
 
-O próprio ModEngine2 vem junto com o app, então você não precisa instalá-lo separadamente (veja [tasks/01](./tasks/01-bundled-modengine.md)).
+O próprio ModEngine2 vem junto com o app, então você não precisa instalá-lo separadamente (veja [ModEngine2 empacotado](./tasks/bundled-modengine.md)).
 
 ## Aspectos legais
 
